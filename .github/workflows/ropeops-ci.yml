@@ -28,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check modified upstream files are listed in docs/UPSTREAM.md
-        run: python3 scripts/check_core_edits.py "origin/${{ github.base_ref }}"
+        run: python3 .github/scripts/check_core_edits.py "origin/${{ github.base_ref }}"
 
   api-tests:
     name: Django tests + tenant isolation

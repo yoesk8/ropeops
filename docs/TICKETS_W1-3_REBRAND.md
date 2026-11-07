@@ -11,7 +11,7 @@ Each is under one day. Order matters. Format: Title / Context / Acceptance crite
 ## R2. RopeOps name and logo in web, space and admin (Frontend Engineer)
 - Acceptance: [ ] No "Plane" name/logo in page titles, headers, sign-in, onboarding, empty states, `manifest.json`. [ ] AGPL headers and LICENSE untouched. [ ] Placeholder RopeOps logo asset in `**/ropeops/` folder.
 - Files: logo components, `apps/web/manifest.json`, titles (list each core file in UPSTREAM.md).
-- Tests: grep check `scripts/check_branding.sh` in CI for user-visible "Plane" strings (excluding licence headers).
+- Tests: grep check `.github/scripts/check_branding.sh` in CI for user-visible "Plane" strings (excluding licence headers).
 
 ## R3. Transactional email and API templates branding (Backend Engineer)
 - Acceptance: [ ] Emails in `apps/api/templates` say RopeOps, no Plane logo/links. [ ] No external sends in tests (locmem).

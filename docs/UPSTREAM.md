@@ -20,7 +20,7 @@ git fetch upstream preview
 
 ## Core files we have touched
 
-CI fails a PR that edits a file under `apps/api/plane/` (excluding `plane/tests/`), `apps/web/`, `apps/space/`, `packages/` or other upstream paths unless the file is in this list (`scripts/check_core_edits.py`). Add a row in the same PR with the reason.
+CI fails a PR that edits a file under `apps/api/plane/` (excluding `plane/tests/`), `apps/web/`, `apps/space/`, `packages/` or other upstream paths unless the file is in this list (`.github/scripts/check_core_edits.py`). Add a row in the same PR with the reason.
 
 <!-- core-files:start -->
 | File | Why | Added in |
@@ -29,7 +29,7 @@ CI fails a PR that edits a file under `apps/api/plane/` (excluding `plane/tests/
 | `docs/*` | Our docs | ROP-3 |
 <!-- core-files:end -->
 
-Paths owned entirely by RopeOps (no upstream equivalent, never listed): `apps/api/ropeops*/`, `scripts/`, `docs/`, `**/ropeops/**`, `.github/workflows/ropeops-*.yml`.
+Paths owned entirely by RopeOps (no upstream equivalent, never listed): `apps/api/ropeops*/`, `.github/scripts/`, `docs/`, `**/ropeops/**`, `.github/workflows/ropeops-*.yml`.
 
 ## Sync log
 
