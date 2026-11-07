@@ -1,0 +1,51 @@
+name: RopeOps checks
+
+# Adds to (does not replace) Plane's own lint, type-check, build and migration workflows.
+# Plane upstream does not run the Django test suite in CI; this does.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - "preview"
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  core-edits:
+    name: Upstream core-edit guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Check modified upstream files are listed in docs/UPSTREAM.md
+        run: python3 .github/scripts/check_core_edits.py "origin/${{ github.base_ref }}"
+
+  api-tests:
+    name: Django tests + tenant isolation
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v6
+      - name: Create API env file (CI only, throwaway values)
+        run: |
+          cp apps/api/.env.example apps/api/.env
+          echo "SECRET_KEY=ci-$(openssl rand -hex 24)" >> apps/api/.env
+      # Same stack as local: docker-compose-test.yml (Postgres, Valkey, RabbitMQ, MinIO).
+      - name: Tenant isolation harness (fast fail)
+        run: docker compose -f docker-compose-test.yml run --rm --build api-tests pytest ropeops
+      - name: Full Django suite
+        run: docker compose -f docker-compose-test.yml run --rm api-tests pytest plane/tests ropeops
+      - name: Tear down
+        if: always()
+        run: docker compose -f docker-compose-test.yml down -v
